@@ -1,47 +1,52 @@
 <template>
+  <div>
+    Logged in
+    <div v-if="loggedIn">Yes</div>
+    <div v-else>No</div>
     <div>
-        Logged in
-        <span v-if="loggedIn">Yes</span>
-        <span v-else>No</span>
-        <div>
-            <button>Sign-out</button>
-        </div>
+      <button class="but" @click="signOut">Sign-out</button>
     </div>
+  </div>
 </template>
 
 <script>
 import * as firebase from "firebase/app";
 import "firebase/auth";
-    export default {
-        created(){
-            firebase.auth().onAuthStateChanged(user => {
-                this.loggedIn = !!user;
-                // if(user){
-                //     this.loggedIn = true;
-                // } else {
-                //     this.logged = false;
-                // }
-            })
-        },
-        data(){
-            return{
-                loggedIn: false
-            }
-        },
-        methods: {
-            async signOut() {
-                try {
-                    const data = await firebase.auth().signout();
-                    console.log(data);
-                    this.$router.replace({name: "login"})
-                } catch(err) {
-                    console.log(err)
-                }
-            }
+export default {
+  mounted() {
+    this.setupFirebase();
+  },
+  methods: {
+    setupFirebase() {
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          console.log("signed-in");
+          this.loggedIn = true;
+        } else {
+          this.loggedIn = false;
+          console.log("signed-out", this.loggedIn);
         }
-    }    
+      });
+    },
+    signOut() {
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          this.$router.replace({ name: "login" });
+        });
+    }
+  },
+  data() {
+    return {
+      loggedIn: false
+    };
+  }
+};
 </script>
 
 <style lang="scss" scoped>
-
+div {
+  color: inherit;
+}
 </style>

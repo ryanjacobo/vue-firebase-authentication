@@ -12,10 +12,16 @@
 </template>
 
 <script>
-import TopHeader from "./components/Top-Header";
+import Header from "./components/Top-Header";
 export default {
-  components: {"top-header": TopHeader}
-}
+  components: { "top-header": Header },
+
+  data() {
+    return {
+      name: "ryan"
+    };
+  }
+};
 </script>
 
 <style lang="scss">
